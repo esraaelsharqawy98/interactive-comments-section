@@ -13,3 +13,9 @@
 #repliesWrapper .repliesList{
     width: 100%;
 }
+@media only screen and (max-width: 600px) {
+    .divider{
+        margin: 0;
+        margin-right: .9rem;
+    }
+}

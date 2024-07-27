@@ -1,14 +1,14 @@
-import './NewComment.css'
 import { useState } from "react"
 import CurrentUserImg from '../../assets/images/avatars/image-juliusomo.png'
 
 function NewComment(props){
     const [inputValue , setInputValue] = useState("");
+
     function handleSetOnComment(){
         props.AddNewComment(inputValue);
-        setInputValue("")
-
+        setInputValue("");
     }
+
     function handleOnChange(event){
       setInputValue(event.target.value);
     }
