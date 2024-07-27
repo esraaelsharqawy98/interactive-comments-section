@@ -1,0 +1,15 @@
+#repliesWrapper{
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    height: fit-content;
+    margin-bottom: 24px;
+}
+.divider{
+    width: 2px;
+    margin: 0 2.313rem;
+    background-color: var(--Light-gray);
+}
+#repliesWrapper .repliesList{
+    width: 100%;
+}

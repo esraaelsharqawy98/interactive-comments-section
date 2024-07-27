@@ -23,6 +23,13 @@
   font-weight: 500;
   color: var(--Dark-blue);
 }
+.commentHeader .badge{
+  background-color: var(--Moderate-blue);
+  color: var(--White);
+  font-size: 1rem;
+  border-radius: 4px;
+  padding: .3rem .5rem;
+}
 .commentHeader .commentDate {
   font-weight: 400;
   color: var(--Grayish-Blue);
@@ -33,16 +40,33 @@
   align-items: center;
   justify-content: flex-end;
 }
-.commentAction .replyButton {
-  text-decoration: none;
-  color: var(--Moderate-blue);
+.actionButton{
+  background: transparent;
+  border: none;
+  cursor: pointer;
   font-weight: 700;
   display: flex;
   gap: 0.5rem;
+  font-size: 1rem;
 }
-/* .commentAction .replyButton:hover {
-  color: var(--Light-grayish-blue);
-} */
+.commentAction .replyButton {
+  color: var(--Moderate-blue);
+}
+.commentAction .replyButton:hover {
+  filter: invert(81%) sepia(35%) saturate(558%) hue-rotate(195deg) brightness(96%) contrast(96%);
+}
+.commentAction .editButton {
+  color: var(--Moderate-blue);
+}
+.commentAction .editButton:hover {
+  filter: invert(81%) sepia(35%) saturate(558%) hue-rotate(195deg) brightness(96%) contrast(96%);
+}
+.commentAction .deleteButton {
+  color: var(--Soft-Red);
+}
+.commentAction .deleteButton:hover {
+ filter: invert(97%) sepia(60%) saturate(6379%) hue-rotate(242deg) brightness(153%) contrast(115%);
+}
 .commentBody {
   grid-area: 2 / 2 / 4 / 6;
   padding-right: 1.5rem;

@@ -15,6 +15,9 @@
     background-color: transparent;
     cursor: pointer;
 }
+.score button:hover {
+    filter: invert(81%) sepia(35%) saturate(558%) hue-rotate(195deg) brightness(96%) contrast(96%);
+}
 .score .scoreContent{
     color: var(--Moderate-blue);
     font-weight:500;

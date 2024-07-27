@@ -1,0 +1,47 @@
+.Form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 1.5rem;
+  background-color: var(--White);
+  border-radius: 0.5rem;
+  margin-bottom: 24px;
+}
+.Form > img {
+  grid-area: 1 / 1 / 2 / 2;
+  width: 40px;
+  height: 40px;
+}
+.Form > textarea {
+  grid-area: 1 / 2 / 3 / 3;
+  width: 506px;
+  height: 96px;
+  border: 1px solid var(--Light-gray);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: .5rem;
+  line-height: 1.4;
+  ::placeholder {
+    color: var(--Grayish-Blue);
+  }
+}
+.Form > textarea:focus {
+    outline: 1px solid var(--Moderate-blue);
+}
+.Form > button {
+  grid-area: 1 / 3 / 2 / 4;
+  background-color: var(--Moderate-blue);
+  color: var(--White);
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: 8px;
+  width: 104px;
+  height: 48px;
+  border: none;
+  cursor: pointer;
+}
+.Form > button:hover {
+    background-color: var(--Light-grayish-blue);
+}

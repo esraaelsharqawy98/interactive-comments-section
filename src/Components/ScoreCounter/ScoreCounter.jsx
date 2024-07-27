@@ -3,9 +3,9 @@ import MinuIcon from "../../assets/images/icon-minus.svg";
 import "./ScoreCounter.css";
 import { useState } from "react";
 
-function ScoreCounter() {
+function ScoreCounter(props) {
 
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(props.Score);
   
   //increment score  
   function Increment() {
