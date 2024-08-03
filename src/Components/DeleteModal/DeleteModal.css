@@ -1,0 +1,61 @@
+.delete-modal-wrapper {
+    padding: 1.25rem;
+    z-index: 1;
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .delete-modal {
+    width: 25rem;
+    background-color: white;
+    padding: 1.688rem;
+    border-radius: 0.625rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .delete-btn-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+  
+  .delete-btn-container > button {
+    height: 2.5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    border: none;
+    border-radius: 0.313rem;
+    cursor: pointer;
+  }
+  
+  .delete-back-btn {
+    color: var(--White);
+    background-color: var(--Grayish-Blue);
+  }
+  
+  .delete-btn {
+    background-color: var(--Soft-Red);
+    color:var(--White);
+  }
+  
+  .delete-modal-title {
+    color: var(--Dark-blue);
+    font-weight: 500;
+  }
+  .delete-modal-text {
+    color: var(--Grayish-Blue)
+  }
+  @media only screen and (max-width: 600px){
+    .delete-modal {
+      width: 100%;
+    }
+  }

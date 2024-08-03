@@ -7,81 +7,136 @@ import RepliesWrapper from "../RepliesWrapper/RepliesWrapper";
 
 import { useState } from "react";
 import ReplyForm from "../ReplyForm/ReplyForm";
-function Comment(props) {
-  
-  const [isReply, setReply] = useState(false);
+import EditForm from "../EditForm/EditForm";
+import DeleteModal from "../DeleteModal/DeleteModal";
 
-  function handleAddReply(replyContent) {
-    const replyWithMention = replyContent;
-    props.AddReply(props.uniqid, replyWithMention);
-    setReply(false);
- 
-  }
+function Comment(props) {
+  const [isReply, setIsReply] = useState(false);
+  const [isEditingComment, setIsEditingComment] = useState(false);
+  const [replyingTextValue, setReplyingTextValue] = useState("");
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
 
   function toggleOnReply() {
-    setReply((prev) => !prev);
+    setReplyingTextValue("@" + props.UserName + " ");
+    setIsReply(!isReply);
   }
 
-  function handleOnDelte(event) {
-    props.deleteItem(event.target.getAttribute("uniqid"));
+  function toggleOnEdit() {
+    setIsEditingComment(!isEditingComment);
   }
 
+  function toggleDeleteModal() {
+    setIsDeleteModal(!isDeleteModal);
+  }
+
+  function handleAddReply() {
+    props.AddReply(props.commentid, replyingTextValue, props.UserName);
+    toggleOnReply();
+  }
+
+  function handleOnDelete() {
+    if (props.ReplyId) {
+      props.deleteReply(props.commentid, props.ReplyId);
+    } else {
+      props.deleteComment(props.commentid);
+    }
+    toggleDeleteModal();
+  }
+
+  function handleOnChangeReplyingText(e) {
+    setReplyingTextValue(e.target.value);
+  }
+
+  function handleEditComment(content) {
+    props.editComment(props.commentid, content);
+    toggleOnEdit();
+  }
+
+  function handleEditReply(content) {
+    props.editReply(props.commentid, props.ReplyId, content);
+    toggleOnEdit();
+  }
 
   return (
     <>
+      {isDeleteModal && (
+        <DeleteModal
+          handleDelete={handleOnDelete}
+          toggleDeleteModal={toggleDeleteModal}
+        />
+      )}
       <div className="comment">
         <ScoreCounter Score={props.Score} />
-
         <div className="commentHeader">
-          <img src={props.Avatar} className="avatar" alt="user image" />
+          <img src={props.Avatar} className="avatar" alt="user" />
           <p className="userName">{props.UserName}</p>
-
-          {props.UserName == "juliusomo" &&
-             (<div className="badge">you</div>)
-          }
-
+          {props.UserName === "juliusomo" && <div className="badge">you</div>}
           <p className="commentDate">{props.CommentDate}</p>
         </div>
 
         <div className="commentAction">
-          {props.UserName == "juliusomo" ? (
+          {props.UserName === "juliusomo" ? (
             <>
               <button
                 className="actionButton deleteButton"
-                uniqid={props.uniqid}
-                onClick={handleOnDelte}
+                onClick={toggleDeleteModal}
               >
-                <img src={DeleteIcon} alt="delete icon" />
+                <img src={DeleteIcon} alt="delete" />
                 Delete
               </button>
-              <button className="actionButton editButton" uniqid={props.uniqid}>
-                <img src={EditIcon} alt="edit icon" />
+              <button
+                className="actionButton editButton"
+                onClick={toggleOnEdit}
+              >
+                <img src={EditIcon} alt="edit" />
                 Edit
               </button>
             </>
-          ) : (<button uniqid={props.uniqid} onClick={toggleOnReply} className="actionButton replyButton">
-          <img src={ReplyIcon} className="replyIcon" alt="reply icon" />
-          Reply
-      </button>)
-          }
-          
+          ) : (
+            <button
+              onClick={toggleOnReply}
+              className="actionButton replyButton"
+            >
+              <img src={ReplyIcon} className="replyIcon" alt="reply" />
+              Reply
+            </button>
+          )}
         </div>
+
         <div className="commentBody">
-          <p>{ props.Content}</p>
+          {isEditingComment ? (
+            <EditForm
+              Content={props.Content}
+              onEdit={props.ReplyId ? handleEditReply : handleEditComment}
+            />
+          ) : (
+            <p>
+              {props.replyingTo && <span className="mention">@{props.replyingTo}, </span>}
+              {props.Content}
+            </p>
+          )}
         </div>
       </div>
 
-      {isReply && 
-        (<ReplyForm AddReply={handleAddReply} replyingTo={props.UserName} />)
-      }
+      {isReply && (
+        <ReplyForm
+          AddReply={handleAddReply}
+          replyingTextValue={replyingTextValue}
+          onChangeReplyText={handleOnChangeReplyingText}
+        />
+      )}
 
       {props.Replies && props.Replies.length > 0 && (
-          <RepliesWrapper Replies={props.Replies} AddReply={props.AddReply} deleteItem={props.deleteItem}/>
-      )
-      }
-      
-      
+        <RepliesWrapper
+          Replies={props.Replies}
+          commentid={props.commentid}
+          AddReply={props.AddReply}
+          deleteReply={props.deleteReply}
+          editReply={props.editReply}
+        />
+      )}
     </>
   );
 }
+
 export default Comment;

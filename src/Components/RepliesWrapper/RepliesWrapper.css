@@ -5,17 +5,17 @@
     height: fit-content;
     margin-bottom: 24px;
 }
-.divider{
-    width: 2px;
-    margin: 0 2.313rem;
-    background-color: var(--Light-gray);
-}
 #repliesWrapper .repliesList{
     width: 100%;
+    margin-left: 2.5rem;
+    padding-left: 2rem;
+    border-left: 2px solid var(--Light-gray);
 }
 @media only screen and (max-width: 600px) {
-    .divider{
-        margin: 0;
-        margin-right: .9rem;
+    #repliesWrapper .repliesList{
+        width: 100%;
+        margin-left: 0;
+        padding-left: 1rem;
+        border-left: 2px solid var(--Light-gray);
     }
 }

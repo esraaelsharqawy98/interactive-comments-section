@@ -1,9 +1,10 @@
 .comment {
   display: grid;
   grid-template-columns: 40px 1fr 80px;
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-rows: repeat(3, auto);
   justify-content: center;
   padding: 1.5rem;
+  padding-bottom: 0;
   background-color: var(--White);
   border-radius: 0.5rem;
   gap: 1rem;
@@ -73,13 +74,17 @@
 }
 .commentBody p {
   color: var(--Grayish-Blue);
-  line-height: 1.4; 
+  line-height: 1.4;
+  font-weight: 400;
+}
+.commentBody .mention{
+  color: var(--Moderate-blue);
+  font-weight: 500;
 }
 
 @media only screen and (max-width: 600px) {
     .comment {
         grid-template-columns: auto 1fr auto;
-        grid-template-rows: repeat(3, auto);
         padding: 1rem;
         column-gap: 1rem;
     }

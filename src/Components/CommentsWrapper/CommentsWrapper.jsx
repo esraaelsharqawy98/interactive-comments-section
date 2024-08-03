@@ -28,7 +28,7 @@ function CommentsWrapper() {
         "Woah, your project looks awesome! How long have you been coding for? I’m still new, but think I want to dive into React as well soon. Perhaps you can give me an insight on where I can learn React? Thanks!",
       replies: [
         {
-          id: 3,
+          id: 1,
           content:
             "If you're still new, I'd recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It's very tempting to jump ahead but lay a solid foundation first.",
           createdAt: "1 week ago",
@@ -36,10 +36,9 @@ function CommentsWrapper() {
           replyingTo: "maxblagun",
           username: "ramsesmiron",
           avatar: UserAvatarThree,
-          replies:[]
         },
         {
-          id: 4,
+          id: 2,
           content:
             "I couldn't agree more with this. Everything moves so fast and it always seems like everyone knows the newest library/framework. But the fundamentals are what stay constant.",
           createdAt: "2 days ago",
@@ -47,7 +46,6 @@ function CommentsWrapper() {
           replyingTo: "ramsesmiron",
           username: "juliusomo",
           avatar: CurrentUserAvatar,
-          replies:[]
         },
       ],
     },
@@ -66,20 +64,12 @@ function CommentsWrapper() {
     setComment(newComments);
   }
 
-  function deleteComment(commentid) {
-    let getcomments = comments.filter((comment) => {
-      return comment.id != commentid;
-    });
-    setComment(getcomments);
-  }
-
-  function AddReply(commentId, replyContent) {
+  function AddReply(commentId, replyContent , replyTo) {
     let newReply = {
-      likes: 0,
-      content: replyContent,
-      replyingTo: comments.find((comment) => comment.id === commentId).username,
+      content: replyContent.startsWith("@" + replyTo + " ") ? replyContent.split("@" + replyTo + " ")[1] : replyContent,
+      replyingTo: replyTo,
       username: "juliusomo",
-      id: commentId,
+      id: comments.find(comment => comment.id === commentId).replies.length + 1,
       createdAt: "now",
       avatar: CurrentUserAvatar,
       score: 0,
@@ -94,14 +84,57 @@ function CommentsWrapper() {
 
     setComment(updatedComments);
   }
+
+  function deleteComment(commentid) {
+    const updatedComments = comments.filter(comment => comment.id !== commentid);
+    setComment(updatedComments);
+  }
+
+  function deleteReply(commentId, replyId) {
+    const updatedComments = comments.map(comment => {
+      if (comment.id === commentId) {
+        return { ...comment, replies: comment.replies.filter(reply => reply.id !== replyId) };
+      }
+      return comment;
+    });
+    setComment(updatedComments);
+  }
+
+  function editComment(commentId, newContent) {
+    const updatedComments = comments.map(comment => {
+      if (comment.id === commentId) {
+        return { ...comment, content: newContent };
+      }
+      return comment;
+    });
+    setComment(updatedComments);
+  }
+
+  function editReply(commentId, replyId, newContent) {
+    const updatedComments = comments.map(comment => {
+      if (comment.id === commentId) {
+        return {
+          ...comment,
+          replies: comment.replies.map(reply => {
+            if (reply.id === replyId) {
+              return { ...reply, content: newContent };
+            }
+            return reply;
+          })
+        };
+      }
+      return comment;
+    });
+    setComment(updatedComments);
+  }
+
   return (
     <section id="commentsList">
       {comments.map((comment) => {
         return (
           <Comment
             key={comment.id}
-            deleteItem={deleteComment}
-            uniqid={comment.id}
+            commentid={comment.id}
             Avatar={comment.avatar}
             UserName={comment.username}
             CommentDate={comment.createdAt}
@@ -109,6 +142,10 @@ function CommentsWrapper() {
             Score={comment.score}
             Replies={comment.replies}
             AddReply={AddReply}
+            deleteComment={deleteComment}
+            deleteReply={deleteReply}
+            editComment={editComment}
+            editReply={editReply}
           />
         );
       })}
