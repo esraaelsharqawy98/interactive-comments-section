@@ -1,10 +1,9 @@
 import "./Comment.css";
-import ReplyIcon from "../../assets/images/icon-reply.svg";
-import EditIcon from "../../assets/images/icon-edit.svg";
-import DeleteIcon from "../../assets/images/icon-delete.svg";
+import ReplyIcon from "/images/icon-reply.svg";
+import EditIcon from "/images/icon-edit.svg";
+import DeleteIcon from "/images/icon-delete.svg";
 import ScoreCounter from "../ScoreCounter/ScoreCounter";
 import RepliesWrapper from "../RepliesWrapper/RepliesWrapper";
-
 import { useState } from "react";
 import ReplyForm from "../ReplyForm/ReplyForm";
 import EditForm from "../EditForm/EditForm";

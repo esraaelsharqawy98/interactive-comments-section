@@ -1,4 +1,4 @@
-import CurrentUserImg from '../../assets/images/avatars/image-juliusomo.png';
+import CurrentUserImg from '/images/avatars/image-juliusomo.png';
 
 function ReplyForm({AddReply,replyingTextValue,onChangeReplyText}) {
 

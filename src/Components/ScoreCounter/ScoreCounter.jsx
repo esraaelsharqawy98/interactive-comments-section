@@ -1,5 +1,5 @@
-import PlusIcon from "../../assets/images/icon-plus.svg";
-import MinuIcon from "../../assets/images/icon-minus.svg";
+import PlusIcon from "/images/icon-plus.svg";
+import MinuIcon from "/images/icon-minus.svg";
 import "./ScoreCounter.css";
 import { useState } from "react";
 
