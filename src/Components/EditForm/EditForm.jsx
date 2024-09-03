@@ -2,41 +2,22 @@ import { useState, useEffect } from 'react';
 import './EditForm.css';
 import useStore from '../../store/Comments';
 
-function EditForm({ commentid, type, parentId }) {
-  const { comments, updateComment, toggleVisibility, updateReply } = useStore();
-
-  const [editingContent, setEditingContent] = useState('');
+function EditForm({ comment, setEditId, type }) {
+  const { updateComment, updateReply } = useStore();
+  const [editingContent, setEditingContent] = useState(comment.content);
 
   useEffect(() => {
-    const getInitialContent = () => {
-      if (type === 'comment') {
-        const comment = comments.find(c => c.id === commentid);
-        return comment ? comment.content : '';
-      } else if (type === 'reply' && parentId) {
-        const parentComment = comments.find(c => c.id === parentId);
-        const reply = parentComment ? parentComment.replies.find(r => r.id === commentid) : null;
-        return reply ? reply.content : '';
-      }
-      return '';
-    };
-
-    setEditingContent(getInitialContent());
-  }, [comments, commentid, type, parentId]);
+    setEditingContent(comment.content);
+  }, [comment]);
 
   const handleEdit = () => {
     if (editingContent.trim()) {
       if (type === 'comment') {
-        updateComment(commentid, editingContent);
-      } else if (type === 'reply' && parentId) {
-        const parentComment = comments.find(c => c.id === parentId);
-        if (parentComment) {
-          const reply = parentComment.replies.find(r => r.id === commentid);
-          if (reply) {
-            updateReply(parentComment.id, reply.id, editingContent);
-          }
-        }
+        updateComment(comment.id, editingContent);
+      } else if (type === 'reply' && comment.parentId) {
+        updateReply(comment.parentId, comment.id, editingContent);
       }
-      toggleVisibility(commentid, 'showEditForm');
+      setEditId(null);
     }
   };
 

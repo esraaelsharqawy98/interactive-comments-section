@@ -2,30 +2,11 @@ import { useState } from 'react';
 import CurrentUserImg from '/images/avatars/image-juliusomo.png';
 import useStore from '../../store/Comments';
 
-function ReplyForm({ parentId, type }) {
-  const { addReply, comments, toggleVisibility } = useStore();
+function ReplyForm({ comment, type, setreplyid }) {
+  const { addReply } = useStore();
   const [replyingTextValue, setReplyingTextValue] = useState("");
 
-  const findComment = () => {
-    if (type === "comment") {
-      return comments.find(c => c.id === parentId);
-    } else if (type === "reply") {
-      for (const c of comments) {
-        const reply = c.replies.find(r => r.id === parentId);
-        if (reply) {
-          return { ...reply, parentId: c.id };
-        }
-      }
-    }
-    return null;
-  };
-
-  const comment = findComment();
-
   const handleAddReply = () => {
-    if (comment) {
-      setReplyingTextValue(`@${comment.username} `);
-    }
     const replyTo = comment.username;
     const replyContent = replyingTextValue.trim();
 
@@ -52,7 +33,7 @@ function ReplyForm({ parentId, type }) {
 
     addReply(comment.id, newReply);
     setReplyingTextValue(""); 
-    toggleVisibility(comment.id, "showReplyForm");
+    setreplyid(null);
   };
 
   const handleOnChangeReplyingText = (e) => {

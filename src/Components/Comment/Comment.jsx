@@ -8,16 +8,31 @@ import ReplyForm from "../ReplyForm/ReplyForm";
 import EditForm from "../EditForm/EditForm";
 import DeleteModal from "../DeleteModal/DeleteModal";
 import './Comment.css';
+import { useState } from "react";
 
 function Comment({ comment, type = "comment", parentId = null }) {
   const { toggleVisibility, visibility } = useStore();
 
-  const isReplyFormVisible = visibility[comment.id]?.showReplyForm || false;
-  const isEditFormVisible = visibility[comment.id]?.showEditForm || false;
-  const isDeleteModalVisible = visibility[comment.id]?.showDeleteModal || false;
+  const [replyId, setReplyId] = useState(null);
+  const [editId, setEditId] = useState(null);
 
-  const handleToggleReplyForm = () => toggleVisibility(comment.id, 'showReplyForm');
-  const handleToggleEditForm = () => toggleVisibility(comment.id, 'showEditForm');
+  const handleToggleReplyForm = () => {
+    if (replyId === comment.id) {
+      setReplyId(null); 
+    } else {
+      setReplyId(comment.id);
+    }
+  };
+
+  const handleToggleEditForm = () => {
+    if (editId === comment.id) {
+      setEditId(null);
+    } else {
+      setEditId(comment.id);
+    }
+  };
+
+  const isDeleteModalVisible = visibility[comment.id]?.showDeleteModal || false;
   const handleToggleDeleteModal = () => toggleVisibility(comment.id, 'showDeleteModal');
 
   return (
@@ -65,8 +80,8 @@ function Comment({ comment, type = "comment", parentId = null }) {
         </div>
 
         <div className="commentBody">
-          {isEditFormVisible ? (
-            <EditForm commentid={comment.id} parentId={parentId} type={type} />
+          {editId === comment.id ? (
+            <EditForm comment={comment} setEditId={setEditId} type={type} />
           ) : (
             <p>
               {comment.replyingTo && (
@@ -79,7 +94,7 @@ function Comment({ comment, type = "comment", parentId = null }) {
       </div>
 
       {isDeleteModalVisible && <DeleteModal parentId={comment.id} type={type} />}
-      {isReplyFormVisible && <ReplyForm parentId={comment.id} type={type} />}
+      {replyId === comment.id && <ReplyForm comment={comment} type={type} setReplyId={setReplyId} />}
       {comment.replies && <RepliesWrapper replies={comment.replies} parentId={comment.id} />}
     </>
   );
