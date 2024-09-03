@@ -13,14 +13,14 @@ import { useState } from "react";
 function Comment({ comment, type = "comment", parentId = null }) {
   const { toggleVisibility, visibility } = useStore();
 
-  const [replyId, setReplyId] = useState(null);
+  const [replyid, setreplyid] = useState(null);
   const [editId, setEditId] = useState(null);
 
   const handleToggleReplyForm = () => {
-    if (replyId === comment.id) {
-      setReplyId(null); 
+    if (replyid === comment.id) {
+      setreplyid(null); 
     } else {
-      setReplyId(comment.id);
+      setreplyid(comment.id);
     }
   };
 
@@ -94,7 +94,7 @@ function Comment({ comment, type = "comment", parentId = null }) {
       </div>
 
       {isDeleteModalVisible && <DeleteModal parentId={comment.id} type={type} />}
-      {replyId === comment.id && <ReplyForm comment={comment} type={type} setReplyId={setReplyId} />}
+      {replyid === comment.id && <ReplyForm comment={comment} type={type} setreplyid={setreplyid} />}
       {comment.replies && <RepliesWrapper replies={comment.replies} parentId={comment.id} />}
     </>
   );
