@@ -1,24 +1,18 @@
 import Comment from "../Comment/Comment";
 import "./RepliesWrapper.css";
 
-function RepliesWrapper(props) {
+function RepliesWrapper({replies,parentId}) {
+  console.log('RepliesWrapper parentId:', parentId);
+  console.log('RepliesWrapper replies:', replies);
   return (
     <section id="repliesWrapper">
       <div className="repliesList">
-        {props.Replies.map((reply) => (
+        {replies.map((reply) => (
           <Comment
             key={reply.id}
-            ReplyId={reply.id}
-            commentid={props.commentid}
-            Avatar={reply.avatar}
-            UserName={reply.username}
-            CommentDate={reply.createdAt}
-            Content={reply.content}
-            Score={reply.score}
-            replyingTo={reply.replyingTo}
-            AddReply={props.AddReply}
-            deleteReply={props.deleteReply}
-            editReply={props.editReply}
+            comment={reply}
+            type="reply"
+            parentId={parentId}
           />
         ))}
       </div>

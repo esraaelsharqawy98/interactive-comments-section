@@ -1,91 +1,52 @@
-import "./Comment.css";
+import useStore from "../../store/Comments";
 import ReplyIcon from "/images/icon-reply.svg";
 import EditIcon from "/images/icon-edit.svg";
 import DeleteIcon from "/images/icon-delete.svg";
 import ScoreCounter from "../ScoreCounter/ScoreCounter";
 import RepliesWrapper from "../RepliesWrapper/RepliesWrapper";
-import { useState } from "react";
 import ReplyForm from "../ReplyForm/ReplyForm";
 import EditForm from "../EditForm/EditForm";
 import DeleteModal from "../DeleteModal/DeleteModal";
+import './Comment.css';
 
-function Comment(props) {
-  const [isReply, setIsReply] = useState(false);
-  const [isEditingComment, setIsEditingComment] = useState(false);
-  const [replyingTextValue, setReplyingTextValue] = useState("");
-  const [isDeleteModal, setIsDeleteModal] = useState(false);
+function Comment({ comment, type = "comment", parentId = null }) {
+  const { toggleVisibility, visibility } = useStore();
 
-  function toggleOnReply() {
-    setReplyingTextValue("@" + props.UserName + " ");
-    setIsReply(!isReply);
-  }
+  const isReplyFormVisible = visibility[comment.id]?.showReplyForm || false;
+  const isEditFormVisible = visibility[comment.id]?.showEditForm || false;
+  const isDeleteModalVisible = visibility[comment.id]?.showDeleteModal || false;
 
-  function toggleOnEdit() {
-    setIsEditingComment(!isEditingComment);
-  }
-
-  function toggleDeleteModal() {
-    setIsDeleteModal(!isDeleteModal);
-  }
-
-  function handleAddReply() {
-    props.AddReply(props.commentid, replyingTextValue, props.UserName);
-    toggleOnReply();
-  }
-
-  function handleOnDelete() {
-    if (props.ReplyId) {
-      props.deleteReply(props.commentid, props.ReplyId);
-    } else {
-      props.deleteComment(props.commentid);
-    }
-    toggleDeleteModal();
-  }
-
-  function handleOnChangeReplyingText(e) {
-    setReplyingTextValue(e.target.value);
-  }
-
-  function handleEditComment(content) {
-    props.editComment(props.commentid, content);
-    toggleOnEdit();
-  }
-
-  function handleEditReply(content) {
-    props.editReply(props.commentid, props.ReplyId, content);
-    toggleOnEdit();
-  }
+  const handleToggleReplyForm = () => toggleVisibility(comment.id, 'showReplyForm');
+  const handleToggleEditForm = () => toggleVisibility(comment.id, 'showEditForm');
+  const handleToggleDeleteModal = () => toggleVisibility(comment.id, 'showDeleteModal');
 
   return (
     <>
-      {isDeleteModal && (
-        <DeleteModal
-          handleDelete={handleOnDelete}
-          toggleDeleteModal={toggleDeleteModal}
-        />
-      )}
       <div className="comment">
-        <ScoreCounter Score={props.Score} />
+        <ScoreCounter id={comment.id} type={type} parentId={parentId} />
+
         <div className="commentHeader">
-          <img src={props.Avatar} className="avatar" alt="user" />
-          <p className="userName">{props.UserName}</p>
-          {props.UserName === "juliusomo" && <div className="badge">you</div>}
-          <p className="commentDate">{props.CommentDate}</p>
+          <img src={comment.avatar} className="avatar" alt={`${comment.username}'s avatar`} />
+          <p className="userName">{comment.username}</p>
+          {comment.username === "juliusomo" && <div className="badge">you</div>}
+          <p className="commentDate">{comment.createdAt}</p>
         </div>
 
         <div className="commentAction">
-          {props.UserName === "juliusomo" ? (
+          {comment.username === "juliusomo" ? (
             <>
               <button
                 className="actionButton deleteButton"
-                onClick={toggleDeleteModal}
+                onClick={handleToggleDeleteModal}
+                aria-label="Delete comment"
               >
                 <img src={DeleteIcon} alt="delete" />
                 Delete
               </button>
               <button
                 className="actionButton editButton"
-                onClick={toggleOnEdit}
+                onClick={handleToggleEditForm}
+                aria-label="Edit comment"
               >
                 <img src={EditIcon} alt="edit" />
                 Edit
@@ -93,8 +54,9 @@ function Comment(props) {
             </>
           ) : (
             <button
-              onClick={toggleOnReply}
+              onClick={handleToggleReplyForm}
               className="actionButton replyButton"
+              aria-label="Reply to comment"
             >
               <img src={ReplyIcon} className="replyIcon" alt="reply" />
               Reply
@@ -103,37 +65,22 @@ function Comment(props) {
         </div>
 
         <div className="commentBody">
-          {isEditingComment ? (
-            <EditForm
-              Content={props.Content}
-              onEdit={props.ReplyId ? handleEditReply : handleEditComment}
-            />
+          {isEditFormVisible ? (
+            <EditForm commentid={comment.id} parentId={parentId} type={type} />
           ) : (
             <p>
-              {props.replyingTo && <span className="mention">@{props.replyingTo}, </span>}
-              {props.Content}
+              {comment.replyingTo && (
+                <span className="mention">@{comment.replyingTo}, </span>
+              )}
+              {comment.content}
             </p>
           )}
         </div>
       </div>
 
-      {isReply && (
-        <ReplyForm
-          AddReply={handleAddReply}
-          replyingTextValue={replyingTextValue}
-          onChangeReplyText={handleOnChangeReplyingText}
-        />
-      )}
-
-      {props.Replies && props.Replies.length > 0 && (
-        <RepliesWrapper
-          Replies={props.Replies}
-          commentid={props.commentid}
-          AddReply={props.AddReply}
-          deleteReply={props.deleteReply}
-          editReply={props.editReply}
-        />
-      )}
+      {isDeleteModalVisible && <DeleteModal parentId={comment.id} type={type} />}
+      {isReplyFormVisible && <ReplyForm parentId={comment.id} type={type} />}
+      {comment.replies && <RepliesWrapper replies={comment.replies} parentId={comment.id} />}
     </>
   );
 }
